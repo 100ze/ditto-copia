@@ -1,0 +1,70 @@
+/* reset */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body{
+      font-size: 100%;
+    }
+
+    /* application */
+
+    body{
+      color: whitesmoke;
+      font-size: 1.4em;
+      background-color: #333;
+    }
+
+    body, button {
+      font-family: "Ubuntu", sans-serif;
+    }
+
+    #wrapper {
+      min-width: 320px;
+      max-width: 640px;
+      margin: 20px auto;
+      padding: 10px;
+
+      background-color: #111;
+    }
+
+    header img {
+        display: block;
+        width: 180px;
+        margin: 0 auto;
+    }
+
+    h3 {
+        margin: 10px 0;
+    }
+
+    section, header{
+        margin: 25px 15px;
+    }
+
+    td, input{
+        text-align: center;
+    }
+
+    table, input, button {
+        width: 100%;
+    }
+
+    input, button {
+        padding: 8px;
+        font-size: 1em;
+    }
+
+    .wr-botao {
+        width: 210px;
+        margin: 0 auto;
+    }
+
+    #botao-ficha, #botao-limpar {
+        display: inline-block;
+        width: 100px;
+        padding: 10px;
+    }
