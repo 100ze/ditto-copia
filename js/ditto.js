@@ -54,7 +54,7 @@ function formate(arr){
 
     let rolagem = "";
 
-    if(arr[0] && arr[0] != 0){
+    if(arr[0] && arr[0] > 0){
         rolagem += arr[0] + "d6";
 
         if(arr[1]){
