@@ -32,6 +32,13 @@
       background-color: #111;
     }
 
+    #aside button {
+      display: inline-block;
+      margin: 5px;
+      padding: 8px 14px;
+      width: auto;
+    }
+
     header img {
         display: block;
         width: 180px;
@@ -42,7 +49,7 @@
         margin: 10px 0;
     }
 
-    section, header{
+    section, header, aside{
         margin: 25px 15px;
     }
 
@@ -64,8 +71,8 @@
         margin: 0 auto;
     }
 
-    #botao-ficha, #botao-limpar {
+    #botao-limpar{
         display: inline-block;
-        width: 100px;
+        width: 100%;
         padding: 10px;
     }

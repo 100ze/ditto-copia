@@ -6,17 +6,30 @@ const tabelaCustom = document.getElementById("tabela-custom");
 const tabelaDefesa = document.getElementById("tabela-defesa");
 const tabela4Movimentos = document.getElementById("tabela-4-movimentos");
 
-const botaoFicha = document.getElementById("botao-ficha");
+const botoesFichas = document.querySelectorAll(".botao-ficha");
 const botaoLimpar = document.getElementById("botao-limpar");
+const inputNomePokemon = document.getElementById("nome-pokemon");
 
-const ficha1 = {};
-const ficha2 = {};
+const fichas = [];
+for (let i = 0; i < 6; i++){
+    fichas[i] = {};
+}
 
-let fichaAtual = 1;
+let numeroDaFichaAtual = 1;
+
+function getFicha(indice){
+    return fichas[indice - 1];
+}
 
 function adicionarFuncaoEmTabela(tabela, funcao){
     const botoes = tabela.querySelectorAll("button");
 
+    for (let botao of botoes) {
+        botao.addEventListener("click", funcao);
+    }
+}
+
+function adicionarFuncaoEmBotao(botoes, funcao){
     for (let botao of botoes) {
         botao.addEventListener("click", funcao);
     }
@@ -35,16 +48,27 @@ function copie(){
 }
 
 function formate(arr){
-    if(arr.length == 1){
+    if (isNaN(arr[0])){
         return arr[0];
-    } else if (arr.length == 2){
-        return arr[0] + "d6 + " + 
-        arr[1];
-    } else {
-        return arr[0] + "d6 + " + 
-        arr[1] + " + " +
-        arr[2];
     }
+
+    let rolagem = "";
+
+    if(arr[0] && arr[0] != 0){
+        rolagem += arr[0] + "d6";
+
+        if(arr[1]){
+            rolagem += " + " + arr[1];
+        }
+
+        if(arr[2]){
+            rolagem += " + " + arr[2];
+        }
+    } else {
+        rolagem = "O pobre Ditto não foi capaz de acompanhar o seu raciocínio superior :(";
+    }
+
+    return rolagem;
 }
 
 function extraiValoresTabela(tabela){
@@ -62,6 +86,7 @@ function salvaValoresNaFicha(ficha){
     ficha.tabelaCustom = extraiValoresTabela(tabelaCustom);
     ficha.tabelaDefesa = extraiValoresTabela(tabelaDefesa);
     ficha.tabela4Movimentos = extraiValoresTabela(tabela4Movimentos);
+    ficha.inputNomePokemon = inputNomePokemon.value;
 }
 
 function insereValoresTabela(tabela, valoresFicha){
@@ -76,13 +101,21 @@ function insereValoresTabela(tabela, valoresFicha){
     }
 }
 
+function insereValorNomePokemon(nome){
+    if (nome){
+        inputNomePokemon.value = nome;
+    } else {
+        inputNomePokemon.value = "";
+    }
+}
+
 function insereValoresTodasAsTabelas(ficha){
    insereValoresTabela(tabelaCustom, ficha.tabelaCustom); 
    insereValoresTabela(tabelaDefesa, ficha.tabelaDefesa); 
    insereValoresTabela(tabela4Movimentos, ficha.tabela4Movimentos); 
 }
 
-function limparValoresTabelas(){
+function limparValores(limparBotao = false){
     const tabelas = [tabelaDefesa, tabela4Movimentos];
 
     for (let tabela of tabelas){
@@ -94,34 +127,45 @@ function limparValoresTabelas(){
     }
 
     tabelaCustom.querySelector("input").value = "";
-}
+    inputNomePokemon.value = "";
 
-function mudarTextoBotao(){
-    if(fichaAtual == 1){
-        botaoFicha.innerText = "Ir para ficha 2";
-    } else {
-        botaoFicha.innerText = "Ir para ficha 1";
-    } 
+    if (limparBotao){
+        botoesFichas[numeroDaFichaAtual - 1].textContent = numeroDaFichaAtual;
+    }
 }
 
 function mudarDeFicha(){
-    if (fichaAtual == 1){
-        salvaValoresNaFicha(ficha1);
-        limparValoresTabelas();
-        insereValoresTodasAsTabelas(ficha2);
-    } else {
-        salvaValoresNaFicha(ficha2);
-        limparValoresTabelas();
-        insereValoresTodasAsTabelas(ficha1);
-    }
+    const proximaFicha = getFicha(this.value);
+    const fichaAtual =  getFicha(numeroDaFichaAtual);
 
-    fichaAtual = fichaAtual == 1 ? 2 : 1;
-    mudarTextoBotao();
+    salvaValoresNaFicha(fichaAtual);
+    limparValores();
+    insereValoresTodasAsTabelas(proximaFicha);
+    insereValorNomePokemon(proximaFicha.inputNomePokemon);
+
+    numeroDaFichaAtual = this.value;
+}
+
+function mudarTextoBotao(){
+    const texto = this.value;
+    const botaoDaFicha = botoesFichas[numeroDaFichaAtual - 1];
+
+    if(texto){
+        botaoDaFicha.textContent = texto;
+    } else {
+        botaoDaFicha.textContent = numeroDaFichaAtual;
+    }
+}
+
+function funcaoBotaoLimpar(){
+    limparValores(true);
 }
 
 adicionarFuncaoEmTabela(tabelaCustom, copie);
 adicionarFuncaoEmTabela(tabelaDefesa, copie);
 adicionarFuncaoEmTabela(tabela4Movimentos, copie);
 
-botaoFicha.addEventListener("click", mudarDeFicha);
-botaoLimpar.addEventListener("click", limparValoresTabelas);
+adicionarFuncaoEmBotao(botoesFichas, mudarDeFicha);
+
+botaoLimpar.addEventListener("click", funcaoBotaoLimpar);
+inputNomePokemon.addEventListener("keyup", mudarTextoBotao);
